@@ -24,7 +24,7 @@ struct GPIO{
 
 #define RCC (struct RCC_REGISTER*) 0x40021000
 #define GPIOA (struct GPIO*) 0x40010800
-//#define GPIOB (struct GPIO*) 0x40010C00
+#define GPIOB (struct GPIO*) 0x40010C00
 //#define GPIOC (struct GPIO*) 0x40011000
 
 void delay(void){
@@ -39,11 +39,24 @@ void main(void){
     RCC->CFGR|=0xA000000; //set clock to external clock, 1010 0000 0000 0000 0000 0000 0000
 
     //RCC->APB2ENR|=0x1C //enable gpio A/B/C
-    RCC->APB2ENR|=0x4; //enable gpioA
+    RCC->APB2ENR|=0xC; //enable gpio A/B
+
+    
+
+    GPIOA->CRL|=0x88888888; //set 8 pins as input, with pull-up/down
+
+    GPIOA->ODR|=0x80FF; //set pin15 to high, first 8 pins set to pull_down
+
+    GPIOB->CRH|=0x33333333; //set 8 pins as outputs with max 50mhx speed, in push/pull configuration
 
 
-    GPIOA->CRL|=0x8; //input, with pull-up/down, 1000
-    GPIOA->ODR|=0x1; //set output to 1, putting pin to pull_down
+
+    
+
+    if(RCC->IDR>0x1){ //1 pin has content
+
+    }   
+
 
     //RCC->IDR first bit == first pin input, 15 = last pin input
 
