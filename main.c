@@ -45,15 +45,17 @@ void main(void){
 
     GPIOA->CRL|=0x88888888; //set 8 pins as input, with pull-up/down
 
-    GPIOA->ODR|=0x80FF; //set pin15 to high, first 8 pins set to pull_down
-
-    GPIOB->CRH|=0x33333333; //set 8 pins as outputs with max 50mhx speed, in push/pull configuration
+    GPIOA->ODR|=0xFF; //set pin15 to high, first 8 pins set to pull_down
 
 
 
+    GPIOB->CRL|=0x33333033; //set 8 pins as outputs with max 50mhx speed, in push/pull configuration (pb2 has special function, BOOT)
+
+    GPIOB->ODR|=0x1; //set pin0 high
     
 
-    if(RCC->IDR>0x1){ //1 pin has content
+
+    if(RCC->IDR>0x1){ //1 pin has content?
 
     }   
 
