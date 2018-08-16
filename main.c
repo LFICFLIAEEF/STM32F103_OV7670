@@ -54,19 +54,21 @@ void main(void){
     GPIOB->ODR|=0x1; //set pin0 high
     
 
-
-    if(RCC->IDR>0x1){ //1 pin has content?
-
-    }   
-
-
-    //RCC->IDR first bit == first pin input, 15 = last pin input
-
-    
-
-
+    //153600 hrefs?
+    uint_32 counter=0;
 
     for(;;){
         //ov7670 handling code
-    }
+        if(RCC->IDR>0x1){ //href Pulled high?
+            counter++;
+        
+            if(){
+            //capture ov7670 data
+            }
+        
+            if(counter>=153599){
+                //export image
+            }
+        }   
+    }//for end
 }
