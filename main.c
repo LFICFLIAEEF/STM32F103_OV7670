@@ -55,7 +55,7 @@ void main(void){
     
 
     //153600 hrefs?
-    uint_32 counter=0;
+    uint_16 counter=0;
 
     for(;;){
         //ov7670 handling code
@@ -67,7 +67,7 @@ void main(void){
             }
         
             if(counter>=153599){
-                //export image
+                //export image, maybe by usb?
             }
         }   
     }//for end
