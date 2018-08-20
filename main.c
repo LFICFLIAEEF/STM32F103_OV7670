@@ -91,9 +91,8 @@ void main(void){
     uint_16 chunks=0; //calculate how many parts should you divide image for output
     
     
-    //when HREF is pulled high and PCLK falls a new byte is written
     uint_16 new_frame=0;
-    //to force new frame, reset and wait for new HREF?
+    //to force new frame, reset and wait for new HREF? or wait for vsync
     
     // pull low /WRST AND /RRST 
     // /RE locks the data in place when HIGH
@@ -103,25 +102,41 @@ void main(void){
         
         //wait for VSYNC pulled high, and enable WEN
         
-        if(){
+        if(){ //vsync high
+            //reset fifo positions
+            //WEN high
         }
+        
+        
         //still need to set a pin for href and see if its pulled high
-        if( GPIOA->IDR>=0x1 ){ 
-         
-            if(){ //when CLOCK pulled low a new byte was written
-                //capture ov7670 data
-                //maybe store memory address and bitshift the values onto it?
-            }
+        if( GPIOA->IDR>=0x1 ){ //when href pulled high
+            get_frame(counter,chunks);
+        }
         
-            if(counter<=0){ //depending on the image size divide it in chunks
-                //export image, maybe by usb?
-            }
-        }   
-        
-         counter--;
     }//for end
+}//main end
+
+void get_frame(uint_16 cycles, uint16 chunks){
+    
+    while(cycles){
+        
+        if(){ //when CLOCK pulled low a new byte was written
+                
+            //capture ov7670 data
+            //maybe store memory address and bitshift the values onto it?
+        }
+        
+        
+    }
+
+    if(counter<=0){ //depending on the image size divide it in chunks
+            //export image, maybe by usb?
+    }
 }
 
+void output_chunk(void){
+
+}
 
 void set_registers(void){
     
