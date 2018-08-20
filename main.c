@@ -27,27 +27,50 @@ struct GPIO{
 #define GPIOB (struct GPIO*) 0x40010C00
 //#define GPIOC (struct GPIO*) 0x40011000
 
-void delay(void){
-    volatile int counter=1000; //1000
-    while(counter--);
-}
 
-void main(void){
-    
-    set_registers();
-    
-    
-    uint_16 width=0;
-    uint_16 height=0;
-    
-    //color_ending
+
+#define VGA
+
+#ifdef VGA
+    uint_16 width=640;
+    uint_16 height=480;
+#endif
+
+#ifdef QVGA
+    uint_16 width=320;
+    uint_16 height=240;
+#endif
+#ifdef CIF
+    uint_16 width=352;
+    uint_16 height=240;
+#endif
+#ifdef QCIF
+    uint_16 width=176;
+    uint_16 height=144;
+#endif
+
+#define color_enconding
     //grb 422
     //rgb 565/55
     //yuv 422
     //ycbcr 422
    
-    uint_16 href_counter=0; //calculate with the above variables
 
+
+void delay(void){
+    volatile int counter=1000; //1000
+    while(counter--);
+}
+
+
+void main(void){
+    
+    set_registers();
+  
+    
+    uint_16 href_counter=0; //calculate with the format and color enconding
+    uint_16 chunks=0; //calculate how many parts should you divide image for output
+    
     
     //when HREF is pulled high and PCLK falls a new byte is written
     uint_16 new_frame=0;
@@ -72,6 +95,7 @@ void main(void){
          counter--;
     }//for end
 }
+
 
 void set_registers(void){
     
