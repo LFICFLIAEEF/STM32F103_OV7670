@@ -77,7 +77,7 @@ struct GPIO{
 
 
 void delay(void){
-    volatile int counter=1000; //1000
+    volatile uint_16 counter=1000; //1000
     while(counter--);
 }
 
@@ -103,7 +103,8 @@ void main(void){
         if( GPIOA->IDR>=0x1 ){ 
          
             if(){ //when CLOCK pulled low a new byte was written
-            //capture ov7670 data
+                //capture ov7670 data
+                //maybe store memory address and bitshift the values onto it?
             }
         
             if(counter<=0){ //depending on the image size divide it in chunks
