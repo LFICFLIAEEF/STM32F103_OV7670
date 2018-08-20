@@ -49,11 +49,30 @@ struct GPIO{
     uint_16 height=144;
 #endif
 
-#define color_enconding
-    //grb 422
-    //rgb 565/55
-    //yuv 422
-    //ycbcr 422
+
+
+#define YUV
+
+#ifdef GRB//grb 422
+    uint_16 type=0;
+    uint_16 depth=8;
+#endif
+#ifdef RGB565//rgb 565
+    uint_16 type=1;
+    uint_16 depth=8;
+#endif
+#ifdef RGB555//rgb 555
+    uint_16 type=2;
+    uint_16 depth=15;
+#endif
+#ifdef YUV//yuv 422
+    uint_16 type=3;
+    uint_16 depth=8;
+#endif
+#ifdef YCBCR//ycbcr 422
+    uint_16 type=4;
+    uint_16 depth=8;
+#endif
    
 
 
