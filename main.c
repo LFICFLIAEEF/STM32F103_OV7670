@@ -95,8 +95,14 @@ void main(void){
     uint_16 new_frame=0;
     //to force new frame, reset and wait for new HREF?
     
+    // pull low /WRST AND /RRST 
+    // /RE locks the data in place when HIGH
+    
     for(;;){
         //ov7670 handling code
+        
+        //wait for VSYNC pulled high, and enable WEN
+        
         if(){
         }
         //still need to set a pin for href and see if its pulled high
