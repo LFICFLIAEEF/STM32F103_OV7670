@@ -73,6 +73,9 @@ struct GPIO{
     uint_16 type=4;
     uint_16 depth=8;
 #endif
+
+//normally each pixel is 2 byte wide
+//but with YCbCr you can skip odd bytes for greyscale image
    
 /* RGB 565 output
 byte 1 = 5 bits/Red, 3bits/Green
@@ -91,19 +94,16 @@ byte 4 = 2 bits/Green, 5bits/Blue
 */
 
 /*
-YCBCR output
-like this?
+YCBCR/YUV/GRB output
+YCbCr like this?
 byte 1 = Cb0
 byte 2 = Y0
 byte 3 = Cr0
 byte 4 = Y1
 byte 5 = Cb2
 byte 6 = Y2
-...
-
-or like this?
-byte 1 = 2 bits/Cb0, 4 bits/Y0, 2 bits/Cr0
-byte 2 = 2 bits/Cb0, 4 bits/Y0, 2 bits/Cr0
+byte 7 = Cr2
+byte 8 = Y3
 ...
 */
 
