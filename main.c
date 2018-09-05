@@ -35,7 +35,6 @@ struct GPIO{
     uint_16 width=640;
     uint_16 height=480;
 #endif
-
 #ifdef QVGA
     uint_16 width=320;
     uint_16 height=240;
@@ -55,27 +54,31 @@ struct GPIO{
 
 #ifdef GRB//grb 422
     uint_16 type=0;
-    uint_16 depth=8;
+    uint_16 bytes_per_pixel=3;
+    uint_16 byte_count=width*height*bytes_per_pixel;
 #endif
 #ifdef RGB565//rgb 565
     uint_16 type=1;
-    uint_16 depth=8;
+    uint_16 bytes_per_pixel=2;
+    uint_16 byte_count=width*height*bytes_per_pixel;
 #endif
 #ifdef RGB555//rgb 555
     uint_16 type=2;
-    uint_16 depth=15;
+    uint_16 bytes_per_pixel=2;
+    uint_16 byte_count=width*height*bytes_per_pixel;
 #endif
 #ifdef YUV//yuv 422
     uint_16 type=3;
-    uint_16 depth=8;
+    uint_16 bytes_per_pixel=3;
+    uint_16 byte_count=width*height*bytes_per_pixel;
 #endif
 #ifdef YCBCR//ycbcr 422
     uint_16 type=4;
-    uint_16 depth=8;
+    uint_16 bytes_per_pixel=3;
+    uint_16 byte_count=width*height*bytes_per_pixel;
 #endif
 
-//normally each pixel is 2 byte wide
-//but with YCbCr you can skip odd bytes for greyscale image
+//byte_count is the amount of times you need to read a byte in order to form a frame
    
 /* RGB 565 output
 byte 1 = 5 bits/Red, 3bits/Green
@@ -92,6 +95,9 @@ byte 3 = first bit useless, 5 bits/Red, 3bits/Green
 byte 4 = 2 bits/Green, 5bits/Blue
 ...
 */
+
+
+//with YCbCr you can skip odd bytes for greyscale image
 
 /*
 YCBCR/YUV/GRB output
@@ -118,56 +124,63 @@ void main(void){
     
     set_registers();
   
-    
-    uint_16 href_counter=0; //calculate with the format and color enconding
-    uint_16 chunks=0; //calculate how many parts should you divide image for output
+    uint_16 read_counter=0;
+    uint_16 chunks=0; //after how many bytes should you dump image
     
     
     uint_16 new_frame=0;
-    //to force new frame, reset and wait for new HREF? or wait for vsync
     
-    // pull low /WRST AND /RRST 
-    // /RE locks the data in place when HIGH
+    //to force new frame, reset and wait for new HREF? or wait for vsync
+    while(!vsinc);
+    //call reset_fifo();
     
     for(;;){
         //ov7670 handling code
         
-        //wait for VSYNC pulled high, and enable WEN
-        
-        if(){ //vsync high
+        if(){ //!vsync
+            //still need to set a pin for href and see if its pulled high
+            if( GPIOA->IDR>=0x1 ){ //when href pulled high
+                read_counter++;
+                get_row();
+
+            }
+            if(read_counter>=chunks){
+                dump_chunk();
+                //dump stm32 data to pc   
+                //and clear memory
+            }
+        }
+        else{ //vsync high
             //reset fifo positions
             //WEN high
+            reset_fifo();
         }
         
-        
-        //still need to set a pin for href and see if its pulled high
-        if( GPIOA->IDR>=0x1 ){ //when href pulled high
-            get_frame(counter,chunks);
-        }
+
         
     }//for end
 }//main end
 
-void get_frame(uint_16 cycles, uint16 chunks){
+void reset_fifo(){
+    // pull low /WRST AND /RRST 
+    // /RE locks the position in the fifo when HIGH
+}
+
+void get_row(uint_16 cycles, uint16 chunks){
     
-    while(cycles){
+    while(GPIOA->IDR>=0x1){ //while href high
         
-        if(){ //when CLOCK pulled low a new byte was written
+        if( !CLOCK ){ //when CLOCK pulled low a new byte was written
                 
             //capture ov7670 data
             //maybe store memory address and bitshift the values onto it?
         }
         
-        
-    }
-
-    if(counter<=0){ //depending on the image size divide it in chunks
-            //export image, maybe by usb?
     }
 }
 
-void output_chunk(void){
-
+void dump_chunk(void){
+    //dump memory to pc
 }
 
 void set_registers(void){
