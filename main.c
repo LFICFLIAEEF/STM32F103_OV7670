@@ -115,7 +115,7 @@ byte 8 = Y3
 
 
 void delay(void){
-    volatile uint_16 counter=1000; //1000
+    volatile uint_16 counter=1000; //ideally gives 1000ms delay
     while(counter--);
 }
 
@@ -128,7 +128,7 @@ void main(void){
     uint_16 chunks=0; //after how many bytes should you dump image
     
     
-    uint_16 new_frame=0;
+    uint_16 frame=0; //make an array to store data?
     
     //to force new frame, reset and wait for new HREF? or wait for vsync
     while(!vsinc);
