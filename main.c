@@ -74,6 +74,38 @@ struct GPIO{
     uint_16 depth=8;
 #endif
    
+/* RGB 565 output
+byte 1 = 5 bits/Red, 3bits/Green
+byte 2 = 3 bits/Green, 5bits/Blue
+byte 3 = 5 bits/Red, 3bits/Green
+byte 4 = 3 bits/Green, 5bits/Blu
+...
+*/
+
+/* RGB 565 output
+byte 1 = first bit useless, 5 bits/Red, 3bits/Green
+byte 2 = 2 bits/Green, 5bits/Blue
+byte 3 = first bit useless, 5 bits/Red, 3bits/Green
+byte 4 = 2 bits/Green, 5bits/Blue
+...
+*/
+
+/*
+YCBCR output
+like this?
+byte 1 = Cb0
+byte 2 = Y0
+byte 3 = Cr0
+byte 4 = Y1
+byte 5 = Cb2
+byte 6 = Y2
+...
+
+or like this?
+byte 1 = 2 bits/Cb0, 4 bits/Y0, 2 bits/Cr0
+byte 2 = 2 bits/Cb0, 4 bits/Y0, 2 bits/Cr0
+...
+*/
 
 
 void delay(void){
