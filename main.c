@@ -112,8 +112,7 @@ byte 7 = Cr2
 byte 8 = Y3
 ...
 */
-
-
+   
 void delay(void){
     volatile uint_16 counter=1000; //ideally gives 1000ms delay
     while(counter--);
@@ -122,13 +121,17 @@ void delay(void){
 
 void main(void){
     
+    
+    uint_16 chunk_size 61440 //after how many bytes should you dump image
+    uint_16 frame[chunk_size/2]; //make an array to store data?
+    
     set_registers();
   
+    
     uint_16 read_counter=0;
-    uint_16 chunks=0; //after how many bytes should you dump image
     
     
-    uint_16 frame=0; //make an array to store data?
+    
     
     //to force new frame, reset and wait for new HREF? or wait for vsync
     while(!vsinc);
@@ -141,10 +144,10 @@ void main(void){
             //still need to set a pin for href and see if its pulled high
             if( GPIOA->IDR>=0x1 ){ //when href pulled high
                 read_counter++;
-                get_row();
+                get_frame();
 
             }
-            if(read_counter>=chunks){
+            if(read_counter>=chunk_size){
                 dump_chunk();
                 //dump stm32 data to pc   
                 //and clear memory
@@ -156,9 +159,9 @@ void main(void){
             reset_fifo();
         }
         
-
         
     }//for end
+    
 }//main end
 
 void reset_fifo(){
@@ -166,7 +169,25 @@ void reset_fifo(){
     // /RE locks the position in the fifo when HIGH
 }
 
-void get_row(uint_16 cycles, uint16 chunks){
+void get_pixel_greyscale(){
+    if(read_counter%2==0){
+        //jump Cb/Cr component
+    }else{
+        //increment read counter
+        
+    }
+}
+
+void get_pixel(){
+    if(read_counter%2){
+        frame[read_counter]; //=input register<<8
+    }else{
+        frame[read_counter-1]; //&=input register
+    }
+    //increment read counter
+}
+
+void get_frame(uint_16 cycles, uint16 chunks){
     
     while(GPIOA->IDR>=0x1){ //while href high
         
