@@ -122,7 +122,7 @@ void delay(void){
 void main(void){
     
     
-    uint_16 chunk_size 61440 //after how many bytes should you dump image
+    const uint_16 chunk_size=49152; //after how many bytes should you dump image
     uint_16 frame[chunk_size/2]; //make an array to store data?
     
     set_registers();
